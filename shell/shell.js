@@ -22,9 +22,9 @@ window.addEventListener('load', event => {
   const url = window.arguments[0];
 
   browser.loadURI(url, null, null);
+
   // dump instead of console.log to write to stdout for tests.
   dump(`opened ${url} in new window\n`);
-  Runtime.openDevTools(browser);
 
   browser.addEventListener('keydown', event => {
     // Reload the web page when the F5 key is pressed.
@@ -33,5 +33,17 @@ window.addEventListener('load', event => {
       browser.reload();
     }
   }, false, true);
+
+  browser.addEventListener('keydown', event => {
+    // Open DevTools on Access + Alt/Option +i.
+    if (event.keyCode && event.keyCode === 73 && !event.shiftKey &&
+        event.altKey && !event.ctrlKey && event.metaKey) {
+      Runtime.openDevTools(browser);
+    }
+  }, false, true);
+
+  // Two's company, three's a crowd.  If you're adding a third keydown
+  // listener for yet another shortcut, then now's the time to implement
+  // an API for adding keyboard shortcuts!
 
 }, false);
